@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
-import { Dimensions, SafeAreaView, View } from 'react-native';
+import { Dimensions, SafeAreaView, View, StyleSheet } from 'react-native';
 import HomeMap from '../../components/HomeMap';
-import CovidMessage from '../../components/CovidMessage';
+import CovidMessage from '../../components/CovidMessage'; // Assuming this is used somewhere
 import HomeSearch from '../../components/HomeSearch';
 
 export default class HomeScreen extends Component {
   render() {
     return (
-      <View>
-        <View style={{ height: Dimensions.get('window').height - 470 }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.mapContainer}>
           <HomeMap />
         </View>
-        <CovidMessage />
-        <View style={{ marginBottom: 30 }}>
+        <View style={styles.searchContainer}>
           <HomeSearch />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  mapContainer: {
+    flex: 1, // Takes up remaining space
+  },
+  searchContainer: {
+    paddingBottom: 30, // Adds space below the search component
+  },
+});

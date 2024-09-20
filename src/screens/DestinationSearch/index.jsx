@@ -1,15 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {View, TextInput, SafeAreaView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, SafeAreaView } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useNavigation } from '@react-navigation/native';
 
-import styles from './styles.jsx';
-import PlaceRow from "./PlaceRow";
+import styles from './styles';
+import PlaceRow from './PlaceRow';
 
 const homePlace = {
   description: 'Home',
   geometry: { location: { lat: 48.8152937, lng: 2.4597668 } },
 };
+
 const workPlace = {
   description: 'Work',
   geometry: { location: { lat: 48.8496818, lng: 2.2940881 } },
@@ -18,6 +19,24 @@ const workPlace = {
 const DestinationSearch = (props) => {
   const [originPlace, setOriginPlace] = useState(null);
   const [destinationPlace, setDestinationPlace] = useState(null);
+
+  const navigation = useNavigation();
+
+  const checkNavigation = () => {
+    if (originPlace && destinationPlace) {
+      console.log('Origin:', originPlace); // Log origin place
+      console.log('Destination:', destinationPlace); // Log destination place
+      navigation.navigate('results', {
+        originPlace,
+        destinationPlace,
+      });
+    }
+  };
+
+  useEffect(() => {
+    checkNavigation();
+  }, [originPlace, destinationPlace]);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -25,7 +44,8 @@ const DestinationSearch = (props) => {
         <GooglePlacesAutocomplete
           placeholder="Where from?"
           onPress={(data, details = null) => {
-            setOriginPlace({data, details});
+            setOriginPlace({ data, details });
+            console.log('Origin Place Selected:', { data, details }); // Log the origin place as soon as it is selected
           }}
           enablePoweredByContainer={false}
           suppressDefaultStyles
@@ -39,7 +59,7 @@ const DestinationSearch = (props) => {
           }}
           fetchDetails
           query={{
-            key: 'AIzaSyC2UTgVYWcirXvwstn9wNrZrmw0t8HRU1s',
+            key: 'AIzaSyC2UTgVYWcirXvwstn9wNrZrmw0t8HRU1s', // Your API Key
             language: 'en',
           }}
           renderRow={(data) => <PlaceRow data={data} />}
@@ -50,7 +70,8 @@ const DestinationSearch = (props) => {
         <GooglePlacesAutocomplete
           placeholder="Where to?"
           onPress={(data, details = null) => {
-            setDestinationPlace({data, details});
+            setDestinationPlace({ data, details });
+            console.log('Destination Place Selected:', { data, details }); // Log the destination place as soon as it is selected
           }}
           enablePoweredByContainer={false}
           suppressDefaultStyles
@@ -64,7 +85,7 @@ const DestinationSearch = (props) => {
           }}
           fetchDetails
           query={{
-            key: 'AIzaSyC2UTgVYWcirXvwstn9wNrZrmw0t8HRU1s',
+            key: 'AIzaSyC2UTgVYWcirXvwstn9wNrZrmw0t8HRU1s', // Your API Key
             language: 'en',
           }}
           renderRow={(data) => <PlaceRow data={data} />}
